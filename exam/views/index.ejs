@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+</head>
+<body>
+    <h1>welcome to our resurant club</h1>
+
+    <ul>
+        <% for(let rest of Resturant){%>
+            <li>
+                <%=rest.restaurantName%>
+
+            </li>
+              <li> <%=rest.Cuisine %></li>
+            <li> <%=rest.Chef%> </li>
+       <li> <%=rest.phoneNo%> </li>
+            <li><%=rest.ImageUrl%> </li>
+        
+        <% }%>
+    </ul>
+<form action="/restaurants" method="post">
+    <div>
+        <label for="name">Resurant Name:</label>
+        <input type="text" id="name" name="restaurantName">
+    </div>
+    <div>
+        <label for="Cuisine">Cuisine:</label>
+        <input type="text" id="Cuisine" name="Cuisine">
+    </div>
+    <div>
+        <label for="Chef">Chef:</label>
+        <input type="text" id="Chef" name="Chef">
+    </div>
+    \ <div>
+        <label for="phoneNo ">phoneNo ✅:</label>
+        <input type="number" id="phoneNo" name="phoneNo">
+    </div> <div>
+        <label for="ImageUrl">ImageUrl:</label>
+        <input type="text" id="ImageUrl" name="ImageUrl">
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+</body>
+</html>

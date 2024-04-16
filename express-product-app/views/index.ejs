@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Product List</h1>
+    <ul id="product-list">
+        <% products.forEach(products => { %>
+            <li>ID: <%= products.id %>, Name: <%= products.name %>, Price: ₹<%= products.price %>, Rating: <%= products.rating %>
+                <button class="delete-btn" data-id="<%= products.id %>">Delete</button>
+                <button class="update-btn" data-id="<%= products.id %>" data-name="<%= products.name %>" data-price="<%= products.price %>" data-rating="<%= products.rating %>">Update</button>
+            </li>
+        <% }); %>
+    </ul>
+
+    <h2>Add New Product</h2>
+    <form id="add-product-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required><br>
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" name="rating" min="0" max="5" step="0.1" required><br>
+        <button type="submit">Add Product</button>
+    </form>
+</body>
+</html>

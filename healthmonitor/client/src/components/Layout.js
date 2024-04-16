@@ -1,0 +1,83 @@
+import React from 'react'
+import '../styles/Layout.css'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { adminMenu, userMenu } from '../Data/Data'
+import { useSelector } from 'react-redux'
+import { Badge, message } from 'antd'
+
+const Layout = ({ children }) => {
+  const { user } = useSelector(state =>state.user);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const doctorMenu=[
+    {
+        name:'Home',
+        path:'/',
+        icon:'fa-solid fa-house'
+    },
+
+    {
+        name:'Appointments',
+        path:'/appointments',
+        icon:'fa-solid fa-list'
+    },
+
+    {
+        name:'Profile',
+        path:`/doctor/profile/${user?._id}`,
+        icon:'fa-solid fa-user'
+    },
+
+]
+
+  const sidebarMenu = user?.isAdmin ?
+   adminMenu : user?.isDoctor?
+   doctorMenu: userMenu;
+ 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  
+    message.success('Logout successful');
+    navigate('/login');
+  };
+
+  
+  return (
+    <div className='main'>
+      <div className='layout'>
+        <div className='sidebar'>
+          <div className='logo'>
+            <h6>Doc App</h6>
+            <hr />
+          </div>
+          <div className='menu'>
+            {sidebarMenu.map(menu => (
+              <div className={`menu-item ${location.pathname === menu.path ? 'active' : ''}`} key={menu.path}>
+                <i className={menu.icon}></i>
+                <Link to={menu.path}>{menu.name}</Link>
+              </div>
+            ))}
+            <div className={`menu-item`} onClick={handleLogout}>
+              <i className='fa-solid fa-right-from-bracket'></i>
+              <Link to="/login">Logout</Link>
+            </div>
+          </div>
+        </div>
+        <div className='content'>
+          <div className="header">
+            <div className="header-content" style={{cursor:'pointer'}}>
+              <Badge count={user?.notification.length} onClick={()=>{navigate('/notification')}}>
+              <i className="fa-solid fa-bell"></i>
+              </Badge>
+              <Link to="/profile">{user?.name}</Link>
+            </div>
+          </div>
+          <div className='body'>{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Layout;

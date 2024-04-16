@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+</head>
+<body>
+    <h1>Product Management</h1>
+
+    <h2>Add Product</h2>
+    <form id="addProductForm">
+        <label for="productName">Name:</label>
+        <input type="text" id="productName" required><br>
+        <label for="productPrice">Price:</label>
+        <input type="number" id="productPrice" required><br>
+        <label for="productDescription">Rating:</label><br>
+        <input type="number" id="rating" required><br>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Products</h2>
+    <ul id="productList"></ul>
+
+    <script>
+        const baseURL = 'http://localhost:3000/api/products';
+
+        function fetchProducts() {
+            fetch(baseURL)
+                .then(response => response.json())
+                .then(products => {
+                    const productList = document.getElementById('productList');
+                    productList.innerHTML = ''; // Clear existing list
+                    products.forEach(product => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${product.name} - $${product.price} - Rating: ${product.rating}`;
+
+                    
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.onclick = () => editProduct(product._id, product.name, product.price, product.rating);
+
+                
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.onclick = () => deleteProduct(product._id);
+
+                        // Add button
+                        const addButton = document.createElement('button');
+                        addButton.textContent = 'Add';
+                        addButton.onclick = () => addProduct();
+
+                        // Append buttons to list item
+                        listItem.appendChild(editButton);
+                        listItem.appendChild(deleteButton);
+                        listItem.appendChild(addButton);
+
+                        productList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching products:', error));
+        }
+
+    
+        fetchProducts();
+
+        document.getElementById('addProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const productName = document.getElementById('productName').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const rating = document.getElementById('rating').value;
+
+    
+            fetch(baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: productName,
+                    price: productPrice,
+                    rating: rating
+                })
+            })
+            .then(response => response.json())
+            .then(newProduct => {
+                console.log('New product added:', newProduct);
+                fetchProducts(); 
+            })
+            .catch(error => console.error('Error adding product:', error));
+        });
+
+    
+        function editProduct(id, name, price, rating) {
+        
+            console.log('Editing product:', id, name, price, rating);
+        }
+
+        // Function to handle deleting a product
+        function deleteProduct(id) {
+            // Delete the product with the provided ID
+            fetch(`${baseURL}/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(deletedProduct => {
+                console.log('Deleted product:', deletedProduct);
+                fetchProducts(); // Refresh the product list after deleting a product
+            })
+            .catch(error => console.error('Error deleting product:', error));
+        }
+
+        // Function to handle adding a product
+        function addProduct() {
+            // You can implement functionality to add products as per your requirements
+            console.log('Adding new product...');
+        }
+    </script>
+</body>
+</html>
